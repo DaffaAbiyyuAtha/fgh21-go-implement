@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func fazzFood(price int, voucher string, distance int, tax bool) {
+func calcDiscount (price int, voucher string) int {
 	var discounts int = 0
 	if voucher == "FAZZFOOD50" {
 		if price >= 50000 {
@@ -20,26 +20,40 @@ func fazzFood(price int, voucher string, distance int, tax bool) {
 			}
 		}
 	}
+	return discounts
+}
+
+func calcfares(distance int)int{
 	var fare int = 5000
 	if distance > 2 {
 		fare = fare + (distance-2)*3000
 	}
+	return fare
+}
 
+func calcTaxs(price int, tax bool)int{
 	var isTax int = 0
 	if tax {
-		isTax = isTax + price*5/100
+		isTax = price*5/100
 	}
+	return isTax
+}
 
-	var subTotal int = price - discounts + fare + isTax
+func fazzFood(price int, voucher string, distance int, tax bool) {
+	discount := calcDiscount(price, voucher)
+	fares := calcfares(distance)
+	taxs := calcTaxs(price,tax)
+
+	var subTotal int = price - discount + fares + taxs
 
 	fmt.Printf("Harga :%d\n", price)
-	fmt.Printf("Potongan :%d\n", discounts)
-	fmt.Printf("Biaya Antar :%d\n", fare)
-	fmt.Printf("Pajak :%d\n", isTax)
+	fmt.Printf("Potongan :%d\n", discount)
+	fmt.Printf("Biaya Antar :%d\n", fares)
+	fmt.Printf("Pajak :%d\n", taxs)
 	fmt.Printf("SubTotal :%d\n", subTotal)
 	
 }
 
 func main() {
-	fazzFood(25000, "DITRAKTIR60", 1, false)
+	fazzFood(75000, "FAZZFOOD50", 5, true)
 }
